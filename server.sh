@@ -141,6 +141,7 @@ _restart() {
 _status() {
   for service in "${SERVICES[@]}"
   do
+
     if ! _is_enabled $service; then
       log::warning "$service is disabled/unmanaged"
       continue
