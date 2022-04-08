@@ -42,6 +42,7 @@ services:
         - "traefik.tcp.routers.myservice.entrypoints=websecure"       
 
     dns-proxy-server:
+        container_name: dns-proxy-server
         restart: always
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
