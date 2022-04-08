@@ -143,7 +143,7 @@ _status() {
   do
 
     if ! _is_enabled $service; then
-      log::warning "$service is disabled/unmanaged"
+      log::warning "$service is unmanaged"
       continue
     fi
 

@@ -1,5 +1,5 @@
 ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-SERVICE := pritunl-vpn
+SERVICE := pritunl
 include $(ROOT_DIR)/../../core/common.mk
 include .env
 
