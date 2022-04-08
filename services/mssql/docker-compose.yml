@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    volumes:
+      - ${VOLUME_DIR}/mssql/data:/var/lib/mssqlql/data
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${DB_ROOT_PASSWORD}
+    restart: always
+
+    networks:
+      - default
+      - traefik-network
+    labels:
+      ## Traefik configuration ##
+      # Enable Traefik #
+      - traefik.enable=true
+      - traefik.docker.network=traefik-network
+
+networks:
+  default:
+    name: mssql-network
+  traefik-network:
+    external:
+      name: traefik-network
