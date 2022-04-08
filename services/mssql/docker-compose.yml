@@ -9,7 +9,7 @@ services:
       - ${VOLUME_DIR}/mssql/data:/var/lib/mssqlql/data
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${DB_ROOT_PASSWORD}
+      - SA_PASSWORD=${MSSQL_ROOT_PASSWORD}
     restart: always
 
     networks:
