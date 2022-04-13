@@ -50,7 +50,7 @@ _cleanup() {
 }
 
 _parse_params() {
-  allowed_commands=(install uninstall start stop restart status services)
+  allowed_commands=(install uninstall start stop restart status services up down)
 
   while :; do
     case "${1-}" in
@@ -115,7 +115,7 @@ _start() {
   for service in "${SERVICES[@]}"
   do
     if _is_enabled $service; then
-      make -s -C "$SERVER_DIR/services/$service" up
+      make -s -C "$SERVER_DIR/services/$service" start
     fi
   done
 }
@@ -124,10 +124,30 @@ _stop() {
   for service in "${SERVICES[@]}"
   do
     if _is_enabled $service; then
+      make -s -C "$SERVER_DIR/services/$service" stop
+    fi
+  done
+}
+
+_up() {
+  for service in "${SERVICES[@]}"
+  do
+    if _is_enabled $service; then
+      make -s -C "$SERVER_DIR/services/$service" up
+    fi
+  done
+}
+
+_down() {
+  for service in "${SERVICES[@]}"
+  do
+    if _is_enabled $service; then
       make -s -C "$SERVER_DIR/services/$service" down
     fi
   done
 }
+
+
 
 _restart() {
   for service in "${SERVICES[@]}"
@@ -183,6 +203,8 @@ _parse_params "$@"
 case "${args[0]-}" in
   install) _install ;;
   uninstall) _uninstall ;;
+  up) _up ;;
+  down) _down ;;  
   start) _start ;;
   stop) _stop ;;
   restart) _restart ;;

@@ -14,7 +14,7 @@ services:
             - ${VOLUME_DIR}/pritunl-data:/var/lib/pritunl
         networks:
           default:
-            ipv4_address: 172.18.0.3
+            ipv4_address: 172.38.0.3
           traefik-network:
         labels:
         ## Watchtower configuration ##
@@ -55,7 +55,7 @@ services:
           - 5380:5380
         networks:
           default:
-            ipv4_address: 172.18.0.2
+            ipv4_address: 172.38.0.2
           traefik-network:
         labels:
         ## Watchtower configuration ##
@@ -87,7 +87,7 @@ networks:
     name: pritunl-network
     ipam:
       config:
-        - subnet: 172.18.0.0/16
+        - subnet: 172.38.0.0/24
   traefik-network:
     external:
       name: traefik-network
