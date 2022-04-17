@@ -1,6 +1,11 @@
 ## Docker commands
 DOCKER := docker
-DOCKER_COMPOSE := docker-compose
+
+ifeq ($(wildcard $(ROOT_DIR)/docker-compose.sh),)
+    DOCKER_COMPOSE := docker-compose
+else
+    DOCKER_COMPOSE := bash docker-compose.sh  
+endif
 DOCKER_COMPOSE_FILE := $(ROOT_DIR)/docker-compose.yml
 
 ## Set 'bash' as default shell
