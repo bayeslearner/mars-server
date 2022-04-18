@@ -164,10 +164,10 @@ _status() {
   for service in "${SERVICES[@]}"
   do
 
-    if ! _is_enabled $service; then
-      log::warning "$service is unmanaged"
-      continue
-    fi
+    # if ! _is_enabled $service; then
+    #   log::warning "$service is unmanaged"
+    #   continue
+    # fi
 
     service_status=$(make -s -C "$SERVER_DIR/services/$service" health)
     output_color=$([[ $service_status == "UP" ]] && echo "\e[32m" || echo "\e[31m")
