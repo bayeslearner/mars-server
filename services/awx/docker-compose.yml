@@ -1,0 +1,88 @@
+version: '3.4'
+
+x-logging:
+  &default-logging
+  options:
+    max-size: '10m'
+    max-file: '5'
+  driver: json-file
+
+services:
+  postgres:
+    image: "postgres:9.6"
+    restart: unless-stopped
+    logging: *default-logging
+    volumes:
+      - ${BASE_PATH:-/awx}/pgdata:/var/lib/postgresql/data
+      - ${BASE_PATH:-/awx}/backup_pgdata:/var/backup/pgsql
+    env_file:
+      - .env
+
+  rabbitmq:
+    image: "rabbitmq:3"
+    restart: unless-stopped
+    logging: *default-logging
+    env_file:
+      - .env
+
+  memcached:
+    image: "memcached:alpine"
+    restart: unless-stopped
+    logging: *default-logging
+
+  awx_web:
+    image: "ansible/awx_web:6.1.0"
+    container_name: awx
+    restart: unless-stopped
+    logging: *default-logging
+    depends_on:
+      - rabbitmq
+      - memcached
+      - postgres
+    labels:
+      - traefik.enable=${TRAEFIK_ENABLE:-true}
+      - traefik.docker.network=traefik-network
+      - traefik.http.routers.awx.entrypoints=web
+      - traefik.http.routers.awx.rule=Host(`${DOMAIN}`)
+      - traefik.http.services.awx.loadbalancer.server.port=8052
+      - "traefik.tcp.routers.awx.tls.passthrough=true"
+      # - "traefik.tcp.routers.myservice.rule=HostSNI(`${DOMAIN}`)"
+      # - "traefik.tcp.routers.myservice.tls.passthrough=true"
+      # - "traefik.tcp.routers.myservice.service=myservice"
+      # - "traefik.tcp.services.myservice.loadbalancer.server.port=443"
+      # - "traefik.tcp.routers.myservice.entrypoints=websecure"    
+
+    volumes:
+      - "./config/SECRET_KEY:/etc/tower/SECRET_KEY"
+    hostname: awxweb
+    user: root
+    env_file:
+      - .env
+    networks:
+    - default
+    - traefik-network
+
+
+  awx_task:
+    image: "ansible/awx_task:6.1.0"
+    restart: unless-stopped
+    logging: *default-logging
+    depends_on:
+      - rabbitmq
+      - memcached
+      - awx_web
+      - postgres
+    volumes:
+      - "./config/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "${BASE_PATH:-/awx}/ansible:/data/ansible"
+    hostname: awxtask
+    user: root
+    env_file:
+      - .env
+    
+networks:
+  default:
+    name: awx-network
+  traefik-network:
+    external:
+      name: traefik-network
