@@ -14,7 +14,7 @@ services:
     logging: *default-logging
     volumes:
       - ${VOLUME_DIR}/awx-data/pgdata:/var/lib/postgresql/data
-      - ${VOLUME_DIR//awx-data/backup_pgdata:/var/backup/pgsql
+      - ${VOLUME_DIR}/awx-data/backup_pgdata:/var/backup/pgsql
     env_file:
       - .env
 

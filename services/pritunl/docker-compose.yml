@@ -12,6 +12,8 @@ services:
         image: jippi/pritunl
         volumes:
             - ${VOLUME_DIR}/pritunl-data:/var/lib/pritunl
+            - ${VOLUME_DIR}/mogodb-data/pritunl:/var/lib/mongodb
+
         networks:
           default:
             ipv4_address: 172.38.0.3
