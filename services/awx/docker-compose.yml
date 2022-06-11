@@ -13,8 +13,8 @@ services:
     restart: unless-stopped
     logging: *default-logging
     volumes:
-      - ${BASE_PATH:-/awx}/pgdata:/var/lib/postgresql/data
-      - ${BASE_PATH:-/awx}/backup_pgdata:/var/backup/pgsql
+      - ${VOLUME_DIR}/awx-data/pgdata:/var/lib/postgresql/data
+      - ${VOLUME_DIR//awx-data/backup_pgdata:/var/backup/pgsql
     env_file:
       - .env
 
@@ -74,7 +74,7 @@ services:
       - postgres
     volumes:
       - "./config/SECRET_KEY:/etc/tower/SECRET_KEY"
-      - "${BASE_PATH:-/awx}/ansible:/data/ansible"
+      - "${VOLUME_DIR}/awx-data/ansible:/data/ansible"
     hostname: awxtask
     user: root
     env_file:
