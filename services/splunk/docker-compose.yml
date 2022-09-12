@@ -138,8 +138,8 @@ services:
     labels:
       - traefik.enable=${TRAEFIK_ENABLE:-true}
       - traefik.docker.network=traefik-network
-      - traefik.http.routers.hf1.entrypoints=web
-      - traefik.http.routers.hf1.rule=Host(`cm1-${DOMAIN}`)
-      - traefik.http.services.hf1.loadbalancer.server.port=8000      
+      - traefik.http.routers.cm1.entrypoints=web
+      - traefik.http.routers.cm1.rule=Host(`cm1-${DOMAIN}`)
+      - traefik.http.services.cm1.loadbalancer.server.port=8000      
 
       
