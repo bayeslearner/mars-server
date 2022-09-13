@@ -1,7 +1,7 @@
 ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 SERVICE := heimdall
 include $(ROOT_DIR)/../../core/common.mk
-include .env
+
 
 .ONESHELL:
 
