@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.9'
 
 services:
   mssql:
@@ -10,8 +10,11 @@ services:
       - ${VOLUME_DIR}/mssql-data:/var/lib/mssql/data
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${MSSQL_ROOT_PASSWORD}
+#      - SA_PASSWORD=${MSSQL_ROOT_PASSWORD}
+      - MSSQL_SA_PASSWORD_FILE=/run/secrets/db_password
     restart: always
+    secrets: 
+      - db_password
 
     networks:
       - default
@@ -21,6 +24,10 @@ services:
       # Enable Traefik #
       - traefik.enable=true
       - traefik.docker.network=traefik-network
+
+secrets:
+  db_password:
+    file: my_secret.txt
 
 networks:
   default:
