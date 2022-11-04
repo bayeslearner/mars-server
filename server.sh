@@ -50,7 +50,7 @@ _cleanup() {
 }
 
 _parse_params() {
-  allowed_commands=(install uninstall start stop restart status services up down)
+  allowed_commands=(install uninstall start stop restart status services up down check)
 
   while :; do
     case "${1-}" in
@@ -78,7 +78,7 @@ _check_requirements() {
   DOCKER_COMPOSE_EXE=$(/usr/bin/which docker-compose || echo 0)
   checks::executable_check ${DOCKER_COMPOSE_EXE} "docker-compose"
   DOCKER_COMPOSE_VERSION="$(${DOCKER_COMPOSE_EXE} --version | grep -oP  '(\d+\.)+\d+')";
-  checks::version_check ${DOCKER_COMPOSE_VERSION} ${MINIMUM_DOCKER_COMPOSE_VERSION} "Docker Compose"
+  #checks::version_check ${DOCKER_COMPOSE_VERSION} ${MINIMUM_DOCKER_COMPOSE_VERSION} "Docker Compose"
 
   MAKE_EXE=$(/usr/bin/which make || echo 0)
   checks::executable_check ${MAKE_EXE} "make"
@@ -205,6 +205,7 @@ _parse_params "$@"
 case "${args[0]-}" in
   install) _install ;;
   uninstall) _uninstall ;;
+  check) _check_requirements ;;
   up) _up ;;
   down) _down ;;  
   start) _start ;;
